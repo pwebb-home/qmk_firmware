@@ -17,7 +17,7 @@
 
 #pragma once
 
-#define HAL_USE_SPI TRUE
-#define HAL_USE_I2C TRUE
+#include_next <mcuconf.h>
 
-#include_next <halconf.h>
+#undef RP_I2C_USE_I2C1
+#define RP_I2C_USE_I2C1 TRUE
