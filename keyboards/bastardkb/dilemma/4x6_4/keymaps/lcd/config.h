@@ -16,21 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
-#ifndef OLED_UPDATE_INTERVAL
-#    ifdef SPLIT_KEYBOARD
-#        define OLED_UPDATE_INTERVAL 60
-#    elif defined(OLED_DISPLAY_128X128)
-#        define OLED_UPDATE_INTERVAL 30
-#    else
-#        define OLED_UPDATE_INTERVAL 15
-#    endif
-#endif
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 8
-#define OLED_DISPLAY_128X128
-#define OLED_UPDATE_PROCESS_LIMIT 2
 
-#define I2C_DRIVER       I2CD1
-#define I2C1_SDA_PIN     GP2
-#define I2C1_SCL_PIN     GP3
-#define I2C1_CLOCK_SPEED 400000
+#define SPLIT_LAYER_STATE_ENABLE
+#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_MODS_ENABLE
+#define LCD_WAIT_TIME 150
+
+#define LCD_RST_PIN GP13
+#define LCD_DC_PIN GP11
+#define LCD_CS_PIN GP12
+//#define QUANTUM_PAINTER_SUPPORTS_NATIVE_COLORS TRUE
+#define QUANTUM_PAINTER_SUPPORTS_256_PALETTE TRUE
+#define QUANTUM_PAINTER_DISPLAY_TIMEOUT 30000

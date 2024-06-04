@@ -16,6 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "color.h"
+#include "qp.h"
+#include "gfx/ninja.qgf.h"
+#include QMK_KEYBOARD_H
+
+static painter_device_t display;
+static painter_image_handle_t my_image;
+static deferred_token my_anim;
 
 enum dilemma_keymap_layers {
     LAYER_BASE = 0,
@@ -124,54 +132,11 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 // clang-format on
 #endif // ENCODER_MAP_ENABLE
 
-
-enum layer_names {
-     _MAC_DEFAULT,
-     _MAC_CODE,
-     _MAC_NUM,
-     _MAC_FUNC
-};
-
-// OLED
-#ifdef OLED_ENABLE
- 
-// Rotate OLED
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return OLED_ROTATION_90; 
+void keyboard_post_init_kb(void) {
+    wait_ms(LCD_WAIT_TIME); 
+    display = qp_gc9a01_make_spi_device(240, 240, LCD_CS_PIN, LCD_DC_PIN, LCD_RST_PIN, 4, 0);         // Create the display
+    qp_init(display, QP_ROTATION_0);   // Initialise the display
+    qp_clear(display);
+    my_image = qp_load_image_mem(gfx_ninja);
+    my_anim = qp_animate(display, 0, 0, my_image);
 }
-
-// Draw to OLED
-bool oled_task_user() {
-    // Set cursor position
-    oled_set_cursor(0, 1);
-
-    // Switch on current active layer
-    switch (get_highest_layer(layer_state)) {
-        case _MAC_DEFAULT :
-            oled_write("Main Layer", false);
-            break;
-        case _MAC_CODE :
-            oled_write("Code Layer", false);
-            break;
-        case _MAC_NUM : 
-            oled_write("Number Layer", false);
-            break;
-        case _MAC_FUNC :
-            oled_write("Function Layer", false);
-            break;
-    }
-
-    return false;
-}
-void render_wpm(uint8_t padding, uint8_t col, uint8_t line) {
-    oled_set_cursor(col, line);
-    oled_write_P(PSTR(OLED_RENDER_WPM_COUNTER), false);
-    if (padding) {
-        for (uint8_t n = padding; n > 0; n--) {
-            oled_write_P(PSTR(" "), false);
-        }
-    }
-    oled_write(get_u8_str(get_current_wpm(), ' '), false);
-}
-
-#endif
