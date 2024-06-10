@@ -9,3 +9,4 @@ WPM_ENABLE            = yes
 OLED_ENABLE           = yes
 ENCODER_MAP_ENABLE    = yes
 PER_KEY_TAPPING       = no
+NO_USB_STARTUP_CHECK  = yes
